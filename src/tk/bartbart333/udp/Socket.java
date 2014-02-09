@@ -20,7 +20,7 @@ public class Socket extends Thread{
 	}
 	
 	public Connection accept(InetAddress ip, int port){
-		Connection connection = new SlaveConnection(ip, port);
+		Connection connection = new SlaveConnection(new PacketInputStream(), ip, port);
 		
 		connections.add(connection);
 		connection.start();
@@ -28,7 +28,7 @@ public class Socket extends Thread{
 	}
 	
 	public Connection connect(InetAddress ip, int port){
-		Connection connection = new MasterConnection(ip, port);
+		Connection connection = new MasterConnection(new PacketInputStream(), ip, port);
 		
 		connections.add(connection);
 		connection.start();

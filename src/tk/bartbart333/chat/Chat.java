@@ -11,7 +11,13 @@ public class Chat {
 		buffer[2] = 'l';
 		buffer[3] = 'l';
 		buffer[4] = 'o';
-		Packet packet = new Packet(buffer, 5);
+		buffer[5] = '\n';
+		buffer[6] = '\n';
+		buffer[7] = 'b';
+		buffer[8] = 'o';
+		buffer[9] = 'd';
+		buffer[10] = 'y';
+		Packet packet = new Packet(buffer, 11);
 		//Window window = new Window();
 		//window.show();
 	}

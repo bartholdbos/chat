@@ -24,6 +24,7 @@ public class Socket extends Thread{
 		
 		connections.add(connection);
 		connection.start();
+		while(!connection.connected);
 		return connection;
 	}
 	
@@ -32,6 +33,8 @@ public class Socket extends Thread{
 		
 		connections.add(connection);
 		connection.start();
+		
+		while(!connection.connected);
 		return connection;
 	}
 	
@@ -43,6 +46,13 @@ public class Socket extends Thread{
 		return socket.getLocalPort();
 	}
 	
+	public void send(Connection connection, Packet packet) throws IOException{
+		byte[] data = packet.getData();
+		DatagramPacket datapacket = new DatagramPacket(data, data.length, connection.ip, connection.port);
+		
+		socket.send(datapacket);
+	}
+	
 	public void close(){
 		running = false;
 		socket.close();
@@ -51,6 +61,7 @@ public class Socket extends Thread{
 	public void run(){
 		byte[] data = new byte[1024];
 		DatagramPacket packet = new DatagramPacket(data, data.length);
+		Packet datapacket;
 		
 		while(running){
 			try{
@@ -59,7 +70,9 @@ public class Socket extends Thread{
 				for(Connection connection : connections){
 					if(packet.getAddress().equals(connection.getAddress())){
 						if(packet.getPort() == connection.getPort()){
+							datapacket = new Packet(packet.getData(), packet.getLength());
 							
+							connection.addPacket(datapacket);
 						}
 					}
 				}

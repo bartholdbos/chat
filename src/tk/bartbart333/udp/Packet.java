@@ -37,8 +37,15 @@ public class Packet {
 			return header.get(key);
 	}
 	
+	public String getType(){
+		return header.get("type");
+	}
+	
+	public byte[] getData(){
+		return new byte[0];
+	}
+	
 	public String getBody() {
 		return body;
 	}
-	
 }

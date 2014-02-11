@@ -1,21 +1,21 @@
 package tk.bartbart333.udp;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 
 public class Connection extends Thread {
 	
+	protected ArrayList<Packet> packets = new ArrayList<Packet>();
 	protected boolean running = true;
-	protected PacketInputStream in;
 	protected InetAddress ip;
 	protected int port;
 	
-	protected Connection(PacketInputStream in, InetAddress ip, int port){
-		this.in = in;
+	protected Connection(InetAddress ip, int port){
 		this.ip = ip;
 		this.port = port;
 	}
 	
-	protected void receive(Packet packet){
+	public void addPacket(byte[] data){
 		
 	}
 	

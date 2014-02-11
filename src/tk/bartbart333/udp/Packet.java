@@ -14,17 +14,19 @@ public class Packet {
 		body = s.substring(headerEnd + 2).substring(0, length - header.length() - 2);
 		
 		String[] headerLines = header.split("\n");
-		if(headerLines.length <= 1) {
+		if(headerLines.length < 1) {
 			System.err.println("Recieved a packet without header, contents: " + body);
 			return;
 		}
 		
 		for(int i = 0; i < headerLines.length; i++) {
 			String[] tokens = headerLines[i].split(":");
-			if(tokens.length <= 1) {
-				System.err.println("Invalid header line, ignoring:" + headerLines[i]);
+			if(tokens.length != 2) {
+				System.err.println("Invalid header line, ignoring: " + headerLines[i]);
 				continue;
 			}
+			
+			this.header.put(tokens[0], tokens[1]);
 		}
 	}
 	

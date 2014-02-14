@@ -4,18 +4,27 @@ import java.net.InetAddress;
 
 public class MasterConnection extends Connection {
 	
-	public MasterConnection(InetAddress ip, int port){
-		super(ip, port);
+	public MasterConnection(Socket socket, InetAddress ip, int port){
+		super(socket, ip, port);
+		
+		Packet connect = new Packet("");
+		connect.setValue("type", "connect");
+		connect.setSeq(1);
+		
+		send(connect);
 	}
 	
 	@Override
 	protected void receive(Packet packet){
 		if(packet.getType() == "connect"){
-			punching = false;
-			// send ack packet
-		}else if(packet.getType() == "ack"){
-			// connection is made
+			setSeq(packet.getSeq());
 			connected = true;
+			
+			Packet ok = new Packet("");
+			ok.setValue("type", "ok");
+			ok.setSeq(getSeq());
+			
+			send(ok);
 		}
 	}
 }

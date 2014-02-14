@@ -4,16 +4,24 @@ import java.net.InetAddress;
 
 public class SlaveConnection extends Connection{
 	
-	public SlaveConnection(InetAddress ip, int port){
-		super(ip, port);
+	public SlaveConnection(Socket socket, InetAddress ip, int port){
+		super(socket, ip, port);
+		
+		Packet punch = new Packet("");
+		punch.setValue("type", "punch");
+		
+		send(punch);
 	}
 	
 	@Override
 	protected void receive(Packet packet){
 		if(packet.getType() == "connect"){
-			punching = false;
-		}else if(packet.getType() == "ack"){
-			// connection is made
+			Packet connect = new Packet("");
+			connect.setValue("type", "connect");
+			connect.setSeq(33);
+			
+			send(connect);
+		}else if(packet.getType() == "ok"){
 			connected = true;
 		}
 	}

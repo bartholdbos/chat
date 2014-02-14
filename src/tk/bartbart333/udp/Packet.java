@@ -1,51 +1,73 @@
 package tk.bartbart333.udp;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class Packet {
 	
-	private HashMap<String, String> header = new HashMap<String, String>();
-	private String body;
+	private HashMap<String, String> headers = new HashMap<String, String>();
+	private String body = "";
 	
-	public Packet(byte[] buffer, int length) {
-		String s = new String(buffer, 0, length);
-		int headerEnd = s.indexOf("\n\n");
-		String header = s.substring(0, headerEnd);
-		body = s.substring(headerEnd + 2).substring(0, length - header.length() - 2);
+	public Packet(byte[] data, int length){
+		String s = new String(data, 0, length);
+		int headerend = s.indexOf("\n\n");
 		
-		String[] headerLines = header.split("\n");
-		if(headerLines.length < 1) {
-			System.err.println("Recieved a packet without header, contents: " + body);
-			return;
-		}
+		String headers = s.substring(0, headerend);
+		body = s.substring(headerend + 2, length);
 		
-		for(int i = 0; i < headerLines.length; i++) {
-			String[] tokens = headerLines[i].split(":");
-			if(tokens.length != 2) {
-				System.err.println("Invalid header line, ignoring: " + headerLines[i]);
-				continue;
-			}
+		for(String line : headers.split("\n")){
+			String[] entry = line.split("=");
 			
-			this.header.put(tokens[0], tokens[1]);
+			this.headers.put(entry[0], entry[1]);
 		}
 	}
 	
-	public String getHeaderProperty(String key) {
-		if(!header.containsKey(key))
-			return null;
-		else
-			return header.get(key);
+	public Packet(String body){
+		this.body = body;
+	}
+	
+	public Packet(String body, HashMap<String, String> headers){
+		this.body = body;
+		this.headers = headers;
+	}
+	
+	public String getValue(String key){
+		return headers.get(key);
 	}
 	
 	public String getType(){
-		return header.get("type");
+		return getValue("type");
+	}
+	
+	public int getSeq(){
+		return Integer.valueOf(getValue("seq"));
+	}
+	
+	public void setSeq(int seq){
+		setValue("seq", String.valueOf(seq));
+	}
+	
+	public void setValue(String key, String value){
+		headers.put(key, value);
+	}
+	
+	public String getBody(){
+		return body;
+	}
+	
+	public void setBody(String body){
+		this.body = body;
 	}
 	
 	public byte[] getData(){
-		return new byte[0];
-	}
-	
-	public String getBody() {
-		return body;
+		String data = "";
+		
+		for(Entry<String, String> s : headers.entrySet()){
+			data += s.getKey() + "=" + s.getValue();
+		}
+		
+		data += "\n\n" + body;
+		
+		return data.getBytes();
 	}
 }

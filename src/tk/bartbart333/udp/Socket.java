@@ -13,14 +13,14 @@ public class Socket extends Thread{
 	private boolean running = true;
 	private ArrayList<Connection> connections = new ArrayList<Connection>();
 	
-	public Socket() throws SocketException{
-		socket = new DatagramSocket();
+	public Socket(int port) throws SocketException{
+		socket = new DatagramSocket(port);
 				
 		this.start();
 	}
 	
 	public Connection accept(InetAddress ip, int port){
-		Connection connection = new SlaveConnection(ip, port);
+		Connection connection = new SlaveConnection(this, ip, port);
 		
 		connections.add(connection);
 		connection.start();
@@ -29,7 +29,7 @@ public class Socket extends Thread{
 	}
 	
 	public Connection connect(InetAddress ip, int port){
-		Connection connection = new MasterConnection(ip, port);
+		Connection connection = new MasterConnection(this, ip, port);
 		
 		connections.add(connection);
 		connection.start();

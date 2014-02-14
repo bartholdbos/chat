@@ -1,25 +1,27 @@
 package tk.bartbart333.chat;
 
-import tk.bartbart333.udp.Packet;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+
+import tk.bartbart333.chat.ui.Window;
 
 public class Chat {
 	
 	public static void main(String[] args) {
-		byte[] buffer = new byte[1024];
-		buffer[0] = 'h';
-		buffer[1] = 'e';
-		buffer[2] = 'l';
-		buffer[3] = 'l';
-		buffer[4] = 'o';
-		buffer[5] = '\n';
-		buffer[6] = '\n';
-		buffer[7] = 'b';
-		buffer[8] = 'o';
-		buffer[9] = 'd';
-		buffer[10] = 'y';
-		Packet packet = new Packet(buffer, 11);
-		//Window window = new Window();
-		//window.show();
+		try {
+			File fle_baumans = new File("./assets/fonts/Baumans-Regular.ttf");
+			Font baumans = Font.createFont(Font.TRUETYPE_FONT, fle_baumans);
+			
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			ge.registerFont(baumans);
+		} catch(Exception ex) {
+			System.err.println("Could not load fonts!");
+			System.exit(1);
+		}
+		
+		Window window = new Window();
+		window.show();
 	}
 	
 }

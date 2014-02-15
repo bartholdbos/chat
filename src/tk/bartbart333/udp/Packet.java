@@ -63,10 +63,10 @@ public class Packet {
 		String data = "";
 		
 		for(Entry<String, String> s : headers.entrySet()){
-			data += s.getKey() + "=" + s.getValue();
+			data += s.getKey() + "=" + s.getValue() + "\n";
 		}
 		
-		data += "\n\n" + body;
+		data += "\n" + body;
 		
 		return data.getBytes();
 	}

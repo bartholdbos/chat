@@ -14,8 +14,8 @@ public class Master {
 	
 	public Master(){
 		try{
-			socket = new Socket(313);
-			slave = socket.connect(InetAddress.getByName("localhost"), 314);
+			socket = new Socket(50100);
+			slave = socket.connect(InetAddress.getByName("80.101.213.60"), 50200);
 			
 			System.out.println("connection made " + slave.getAddress().getHostAddress() + ":" + slave.getPort());
 		}catch(SocketException e){

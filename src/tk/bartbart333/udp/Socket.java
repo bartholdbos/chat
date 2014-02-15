@@ -34,7 +34,15 @@ public class Socket extends Thread{
 		connections.add(connection);
 		connection.start();
 		
-		while(!connection.connected);
+		while(true){
+			//System.out.println("hey");
+			if(connection.connected){
+				break;
+			}			
+		}
+		
+		System.out.println("connected1");
+		
 		return connection;
 	}
 	

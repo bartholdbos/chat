@@ -24,7 +24,18 @@ public class Socket extends Thread{
 		
 		connections.add(connection);
 		connection.start();
-		while(!connection.connected);
+		
+		System.out.println(">>> Waiting for connection...");
+		
+		boolean ready = false;
+		while(!ready) {
+			// Stop waiting if connection has been made
+			if(connection.connected) {
+				System.out.println(">>> Connection established!");
+				ready = true;
+			}
+		}
+		
 		return connection;
 	}
 	
@@ -38,6 +49,7 @@ public class Socket extends Thread{
 		
 		boolean ready = false;
 		while(!ready) {
+			// Stop waiting if connection has been made
 			if(connection.connected) {
 				System.out.println(">>> Connection established!");
 				ready = true;
